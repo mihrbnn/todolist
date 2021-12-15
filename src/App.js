@@ -1,10 +1,23 @@
 
 import "./App.css";
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import ListItems from "./components/ListItems";
 
 function App() {
   const [list, setList] = useState([])
+
+  useEffect(() => {
+    const getTodos = JSON.parse(localStorage.getItem('list'))
+    if(getTodos) {
+      setList(getTodos)
+    }
+  },[])
+
+  useEffect(() => {
+    localStorage.setItem('list',JSON.stringify(list))
+  }, [list])
+
+
   function eventSubmit(e) {
     e.preventDefault()
     if (e.target[0].value) {
