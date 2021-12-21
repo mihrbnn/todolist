@@ -1,53 +1,49 @@
-
-import "./App.css";
-import { useState,useEffect } from "react";
-import ListItems from "./components/ListItems";
+import React from "react"
+import './App.css';
+import { useState, useEffect } from 'react';
+import ListItems from './components/ListItems';
 
 function App() {
-  const [list, setList] = useState([])
+  const [list, setList] = useState([]);
 
   useEffect(() => {
-    const getTodos = JSON.parse(localStorage.getItem('list'))
-    if(getTodos) {
-      setList(getTodos)
+    const getTodos = JSON.parse(localStorage.getItem('list'));
+    if (getTodos) {
+      setList(getTodos);
     }
-  },[])
+  }, []);
 
   useEffect(() => {
-    localStorage.setItem('list',JSON.stringify(list))
-  }, [list])
-
+    localStorage.setItem('list', JSON.stringify(list));
+  }, [list]);
 
   function eventSubmit(e) {
-    e.preventDefault()
+    e.preventDefault();
     if (e.target[0].value) {
-      setList([...list, { value: e.target[0].value, isDone: false }])  
-      e.target[0].value=""
-    }   
+      setList([...list, { value: e.target[0].value, isDone: false }]);
+      e.target[0].value = '';
+    }
   }
 
-  function taskCompleted(item){
-    const newList = list.map(value => {
+  function taskCompleted(item) {
+    const newList = list.map((value) => {
       if (item === value) {
-      value.isDone=!value.isDone
-      console.log(value)
+        value.isDone = !value.isDone;
+        console.log(value);
       }
-    return value
-    })
-    setList(newList)
-
+      return value;
+    });
+    setList(newList);
   }
 
   function deleteItem(value) {
-    const newList = list.filter(
-      i=>i.value !== value.value
-    );
-    setList(newList)
+    const newList = list.filter((i) => i.value !== value.value);
+    setList(newList);
   }
 
   return (
     <div className="container col-sm-6 mt-5">
-      <form onSubmit={(e)=>eventSubmit(e)}>
+      <form onSubmit={(e) => eventSubmit(e)}>
         <div className="mb-3">
           <input
             type="text"
@@ -55,18 +51,22 @@ function App() {
             id="exampleInputEmail1"
             placeholder="bir görev giriniz"
           />
-         
         </div>
         <button type="submit" className="btn btn-primary mb-3 ">
           Ekle
         </button>
       </form>
       <div>
-          <ul className="list-group">
-            {
-            list.map((item, index) => <ListItems key={index} item={item} deleteItem={() => deleteItem(item)} updateItem={()=>taskCompleted(item)}/>)
-            }
-          </ul> 
+        <ul className="list-group">
+          {list.map((item, index) => (
+            <ListItems
+              key={index}
+              item={item}
+              deleteItem={() => deleteItem(item)}
+              updateItem={() => taskCompleted(item)}
+            />
+          ))}
+        </ul>
       </div>
     </div>
   );
